@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <title>Interactive rating</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      background-color: hsl(216, 12%, 8%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      font-family: "Overpass", sans-serif;
+    }
+
+    .rating-card {
+      width: 20rem;
+      background-color: hsl(213, 19%, 18%);
+      padding: 1rem;
+      margin: auto;
+      border-radius: 0.4rem;
+    }
+
+    .icon-star {
+      padding: 0.8rem;
+      background-color: hsl(216, 12%, 8%);
+      border-radius: 100%;
+      margin: 0.5rem 0;
+    }
+
+    .rating-card h1 {
+      color: white;
+      font-size: 1.3rem;
+      margin: 0.5rem 0;
+    }
+
+    .rating-card p {
+      color: hsl(217, 12%, 63%);
+      margin: 0.7rem 0;
+    }
+
+    .ratings {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      color: hsl(217, 12%, 63%);
+      margin: 1.7rem 0;
+    }
+
+    .ratings li {
+      padding: 0.8rem;
+      border-radius: 100%;
+      background-color: hsl(216, 12%, 8%);
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Active & hover states */
+    .ratings li:hover {
+      background-color: hsl(25, 97%, 53%);
+      color: hsl(216, 12%, 8%);
+    }
+
+    .ratings li.active {
+      background-color: white;
+      color: hsl(216, 12%, 8%);
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      justify-self: center;
+      width: 16rem;
+      padding: 0.8rem;
+      background-color: hsl(25, 97%, 53%);
+      color: hsl(216, 12%, 8%);
+      font-weight: 700;
+      border-radius: 1.6rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: white;
+    }
+
+    .thank-you-card {
+      width: 20rem;
+      background-color: hsl(213, 19%, 18%);
+      padding: 2rem;
+      margin: 1rem auto;
+      border-radius: 0.4rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .selection-text {
+      background-color: hsl(216, 12%, 8%);
+      padding: 0.5rem;
+      border-radius: 1.2rem;
+      margin: 1rem 0;
+      color: hsl(25, 97%, 53%);
+    }
+
+    .thank-you-card h2 {
+      color: white;
+    }
+
+    .thank-you-card {
+      color: hsl(217, 12%, 63%);
+    }
+
+    .receipt-img {
+      width: 10rem;
+    }
+
+     .go-back-btn {
+      margin-top: 1rem;
+      background-color: transparent;
+      color: hsl(25, 97%, 53%);
+      border: 1px solid hsl(25, 97%, 53%);
+      border-radius: 1.6rem;
+      padding: 0.5rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .go-back-btn:hover {
+      background-color: hsl(25, 97%, 53%);
+      color: hsl(216, 12%, 8%);
+    }
+
+
+    .attribution { font-size: 11px; text-align: center; color: white; font: 600;}
+    .attribution a { color: white; }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- Rating state start -->
+    <div class="rating-card">
+      <img src="./images/icon-star.svg" alt="icon-star" class="icon-star">
+      <h1>How did we do?</h1>
+      <p>Please let us know how we did with your support request. All feedback is appreciated 
+      to help us improve our offering!</p>
+      <ul class="ratings">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+      </ul>
+      <button class="btn">SUBMIT</button>
+    </div>
+
+    <!-- Thank you state start -->
+    <div class="thank-you-card">
+      <img src="./images/illustration-thank-you.svg" alt="illustration-thank-you" class="receipt-img">
+      <p class="selection-text">You selected <span id="selected-rating">0</span> out of 5</p>
+      <h2>Thank you!</h2>
+      <p>We appreciate you taking the time to give a rating. If you ever need more support, 
+      don’t hesitate to get in touch!</p>
+      <button class="go-back-btn">Go Back</button>
+    </div>
+  </main>
+
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="https://devolabanks.vercel.app" target="_blank">Dev Olabanks</a>.
+  </div>
+
+  <script>
+    const ratings = document.querySelectorAll('.ratings li');
+    const submitBtn = document.querySelector('.btn');
+    const ratingCard = document.querySelector('.rating-card');
+    const thankYouCard = document.querySelector('.thank-you-card');
+    const selectedRating = document.getElementById('selected-rating');
+     const goBackBtn = document.querySelector('.go-back-btn');
+    let selectedValue = null;
+
+    // Handle rating selection
+    ratings.forEach(rating => {
+      rating.addEventListener('click', () => {
+        ratings.forEach(r => r.classList.remove('active'));
+        rating.classList.add('active');
+        selectedValue = rating.textContent;
+      });
+    });
+
+    // Handle submit
+    submitBtn.addEventListener('click', () => {
+      if (selectedValue) {
+        selectedRating.textContent = selectedValue;
+        ratingCard.style.display = 'none';
+        thankYouCard.style.display = 'flex';
+      } else {
+        alert('Please select a rating before submitting!');
+      }
+    });
+
+    // Handle go back
+    goBackBtn.addEventListener('click', () => {
+      thankYouCard.style.display = 'none';
+      ratingCard.style.display = 'block';
+      ratings.forEach(r => r.classList.remove('active'));
+      selectedValue = null;
+      selectedRating.textContent = '0';
+    });
+  </script>
+</body>
+</html>
